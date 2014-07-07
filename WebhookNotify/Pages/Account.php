@@ -1,7 +1,7 @@
 <?php
 
     /**
-     * Plugin administration
+     * Plugin user settings
      */
 
     namespace IdnoPlugins\WebhookNotify\Pages {
@@ -9,28 +9,31 @@
         /**
          * Default class to serve the homepage
          */
-        class Admin extends \Idno\Common\Page
+        class Account extends \Idno\Common\Page
         {
 
             function getContent()
             {
                 $this->adminGatekeeper(); // Admins only
                 $t = \Idno\Core\site()->template();
-                $body = $t->draw('admin/notifywebhook');
+                $body = $t->draw('account/notifywebhook');
                 $t->__(['title' => 'Notify via Webhook', 'body' => $body])->drawPage();
             }
 
             function postContent() {
-                $this->adminGatekeeper(); // Admins only
+                $this->gatekeeper(); 
+		
+		$user = \Idno\Core\site()->session()->currentUser();
               
 		
 		$webhook_notify_url = $this->getInput('webhook_notify_url');
 		
-                \Idno\Core\site()->config->config['webhook_notify_url'] = $webhook_notify_url;
+                $user->webhook_notify_url = $webhook_notify_url;
 		
-                \Idno\Core\site()->config()->save();
+                $user->save();
+		
                 \Idno\Core\site()->session()->addMessage('Your Webhook details were saved.');
-                $this->forward('/admin/notifywebhook/');
+                $this->forward('/account/notifywebhook/');
             }
 
         }
