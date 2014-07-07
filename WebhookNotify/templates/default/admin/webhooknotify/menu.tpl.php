@@ -1,0 +1,1 @@
+<li <?php if ($_SERVER['REQUEST_URI'] == '/admin/notifywebhook/') echo 'class="active"'; ?>><a href="/admin/notifywebhook/">Notify via Webhook</a></li>
